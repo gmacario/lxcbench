@@ -1,0 +1,23 @@
+LXCBENCH - Linux Containers Benchmarking
+========================================
+
+Among the different virtualization technologies Linux Containers (LXC)
+are particularly appealing for implementing multi-hosting embedded systems,
+by providing a userspace container object that supports full resource
+isolation and resource control for an applications or a system.
+
+The purpose of LXCBENCH GENIVI incubation project is to gain a better
+understanding of the Linux Containers capabilities through benchmarking.
+
+Home page: http://projects.genivi.org/lxcbench/
+
+Mailing list: genivi-lxcbench@lists.genivi.org
+- please use this list for all discussion: bug reports, enhancements, etc.
+- archived at: http://lists.genivi.org/pipermail/genivi-lxcbench
+- anyone is welcome to join the list; to do so, visit
+  http://lists.genivi.org/mailman/listinfo/genivi-lxcbench
+
+Patches are most welcome; if possible, please make them with diff -c and
+include ChangeLog entries.
+
+LXCBENCH is free software.  See the file COPYING for copying conditions.
