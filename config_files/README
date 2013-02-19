@@ -1,0 +1,3 @@
+Make.Rules		Make.Rules to cross compile libcap for ARM
+linux-3.6.7-lxc.config	Config file for Linux 3.6.7 to enable all the features
+			needed for LXC on i.MX53QSB
