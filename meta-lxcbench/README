@@ -1,0 +1,9 @@
+meta-lxcbench
+=============
+
+Yocto layer to build a distribution for the LXCBENCH project.
+
+Tested with Mentor Embedded Linux 6.0
+See http://www.mentor.com/embedded-software/linux/
+
+Gianpaolo Macario <gianpaolo_macario@mentor.com>
