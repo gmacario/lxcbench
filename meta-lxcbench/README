@@ -1,9 +1,37 @@
 meta-lxcbench
 =============
 
-Yocto layer to build a distribution for the LXCBENCH project.
+This Yocto layer holds the distro configuration and supplementary
+files required to build an embedded Linux distribution
+for the LXCBENCH project.
+
+This layer depends on:
+
+URI: git://git.openembedded.org/openembedded-core
+Branch: danny
+Revision: f609bf5525450bfdb8e0864d44c41cce7f9319c9
+          Aka, the '1.3' tag of poky.
+
+URI: git://git.openembedded.org/meta-openembedded
+Revision: 68f05443333afa527e3b24e4caae6115dfb6b6b6
 
 Tested with Mentor Embedded Linux 6.0
 See http://www.mentor.com/embedded-software/linux/
 
-Gianpaolo Macario <gianpaolo_macario@mentor.com>
+
+Contributing
+------------
+
+Browse url: http://git.projects.genivi.org/?p=lxcbench.git
+Clone url: git://git.projects.genivi.org/lxcbench.git
+
+To contribute to this layer you should the patches for review to the
+mailing list.
+
+Mailing list: genivi-lxcbench@lists.genivi.org
+
+When sending single patches, please use something like
+'git send-email -1 --to genivi-lxcbench@lists.genivi.org'
+
+When sending a series, please use poky/meta/scripts/create-pull-request
+(aka oe-core/scripts/create-pull-request).
