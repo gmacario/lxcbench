@@ -8,7 +8,8 @@ LICENSE = "GPLv2"
 #require recipes-core/images/core-image-base.bb
 require recipes-core/images/core-image-minimal.bb
 
-#IMAGE_INSTALL_append = " packagegroup-atp-base \
-#                         packagegroup-xserver-ivi"
+IMAGE_INSTALL_append = "\
+	packagegroup-lxcbench-base \
+"
 
 # EOF
