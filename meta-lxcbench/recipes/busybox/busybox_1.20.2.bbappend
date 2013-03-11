@@ -25,13 +25,16 @@ PRINC := "${@int(PRINC) + 1}"
 #}
 
 do_prepare_config_append() {
-        #echo "DEBUG: do_prepare_config_append()"
+	#echo "DEBUG: do_prepare_config_append()"
+	echo "DEBUG: do_prepare_config_append: MACHINE=" ${MACHINE}
 
-	# FIXME: CodeBench Lite 2012.03-27-i686-pc-linux-gnu does not have rpc/rpc.h
-        sed -i -e '/CONFIG_FEATURE_HAVE_RPC/d' ${S}/.config
-        echo "# CONFIG_FEATURE_HAVE_RPC is not set" >> ${S}/.config
-        sed -i -e '/CONFIG_MOUNT/d' ${S}/.config
-        echo "# CONFIG_MOUNT is not set" >> ${S}/.config
+	if [ "${MACHINE}" = "qemux86" ]; then
+	    # FIXME: CodeBench Lite 2012.03-27-i686-pc-linux-gnu does not have rpc/rpc.h
+	    sed -i -e '/CONFIG_FEATURE_HAVE_RPC/d' ${S}/.config
+	    echo "# CONFIG_FEATURE_HAVE_RPC is not set" >> ${S}/.config
+	    sed -i -e '/CONFIG_MOUNT/d' ${S}/.config
+	    echo "# CONFIG_MOUNT is not set" >> ${S}/.config
+	fi
 
 	echo "DEBUG: Search for RPC in .config"
 	grep -e "RPC" ${S}/.config
