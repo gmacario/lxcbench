@@ -1,17 +1,28 @@
 #!/bin/sh
 
-# From http://www.wandboard.org/index.php/forums?place=msg%2Fwandboard%2Fiz7QBZdJ-bE%2F1ePk3Nnb1BoJ
-#
+# Inspired by
+# http://www.wandboard.org/index.php/forums?place=msg%2Fwandboard%2Fiz7QBZdJ-bE%2F1ePk3Nnb1BoJ
+
+#set -x
+
+SDCARD_FILE=~/tmp/sdcard.img
+MOUNTPOINT=/tmp/sdcard
+
 # First of all, you need to have 3 files :
 # - "uImage" : kernel file.
 # - "u-boot.imx" : uboot file.
 # - Your root file system.
-# 
+#
 # The following script will create a "sdcard.img" file with your freshly built uImage and u-boot.imx files.
 # You also need to provide a rootfs. In this case, it is a tar file "myrootfs.tar".
+#
+UBOOT_FILE=u-boot-6dl.bin
+UIMAGE_FILE=uImage
+#ROOTFS_FILE=
 
-dd bs=512 count=$(((1024*1024*1024)/512))if=/dev/zero of=sdcard.img
-cat <<EOF | fdisk sdcard.img
+mkdir -p `dirname ${SDCARD_FILE}`
+dd bs=512 count=$(((1024*1024*1024)/512)) if=/dev/zero of=${SDCARD_FILE}
+cat <<EOF | fdisk ${SDCARD_FILE}
 o
 n
 p
@@ -20,23 +31,49 @@ p
 
 w
 EOF
-losetup /dev/loop0 sdcard.img -o $((8192*512))
-mkfs.ext3 /dev/loop0
-mount /dev/loop0 /mnt/sdcard
 
-tar xf myrootfs.tar -C /mnt/sdcard
-umount /mnt/sdcard
-losetup -d /dev/loop0
+if [ "${UBOOT_FILE}" != "" ]; then
+    echo "INFO: Adding ${UBOOT_FILE}"
+    # Command to flash newer U-Boot (ver. 2013.xx):
+    #dd if=${UBOOT_FILE} of=${SDCARD_FILE} conv=notrunc bs=512 seek=2
+    # Command to flash old U-Boot (2009.xx):
+    dd if=${UBOOT_FILE} of=${SDCARD_FILE} conv=notrunc bs=512 seek=2 skip=2
+fi
 
-dd bs=1M seek=1 conv=notrunc if=uImage of=sdcard.img
-dd bs=512 seek=2 conv=notrunc if=u-boot.imx of=sdcard.img
+if [ "${UIMAGE_FILE}" != "" ]; then
+    echo "INFO: Adding ${UIMAGE_FILE}"
+    dd if=${UIMAGE_FILE} conv=notrunc of=${SDCARD_FILE} bs=1M seek=1
+fi
 
+if [ "${ROOTFS_FILE}" != "" ]; then
+    echo "INFO: Adding ${ROOTFS_FILE}"
 
-# Once your "sdcard.img" file is created, you have to put it into your sdcard (using dd).
+    # FIXME: Should mount Partition 1 of ${SDCARD_FILE} instead!
+    sudo losetup /dev/loop0 ${SDCARD_FILE} -o $((8192*512))
+    sudo mkfs.ext3 /dev/loop0
+    mkdir -p ${MOUNTPOINT}
+    sudo mount /dev/loop0 ${MOUNTPOINT}
+
+    tar xf ${ROOTFS_FILE} -C ${MOUNTPOINT}
+
+    sudo umount ${MOUNTPOINT}
+    sudo losetup -d /dev/loop0
+fi
+
+ls -la ${SDCARD_FILE}
+md5sum ${SDCARD_FILE}
+
+# Once your ${SDCARD_FILE} file is created, you have to put it into your sdcard (using dd).
+# Example:
+#	SDCARD_DEV=/dev/sdX
+#	sudo umount ${SDCARD_DEV}?
+#	sudo dd if=sdcard.img of=${SDCARD_DEV}
+
 # At the first boot, go into uboot and change your environment variables like this :
-
+#
 # setenv bootargs "console=ttymxc0,115200 root=/dev/mmcblk0p1 rootwait ro video=mxcfb0:dev=hdmi,1920x1080M@60,if=RGB24"
 # setenv loadaddr 0x10800000
-# setenv bootcmd "mmc dev 0; mmc read ${loadaddr} 0x800 0x2200; bootm"
+# setenv bootcmd 'mmc dev 2; mmc read ${loadaddr} 0x800 0x2200; bootm'
+# saveenv
 
 # === EOF ===
