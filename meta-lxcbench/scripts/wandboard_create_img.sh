@@ -23,7 +23,7 @@ ROOTFS_FILE=~/mel6-lxcbench/build-imx53qsb/tmp/deploy/images/core-image-lxcbench
 echo "INFO: Creating ${SDCARD_FILE}"
 mkdir -p `dirname ${SDCARD_FILE}`
 dd bs=512 count=$(((1024*1024*1024)/512)) if=/dev/zero of=${SDCARD_FILE}
-cat <<EOF | fdisk ${SDCARD_FILE}
+cat <<EOT | fdisk ${SDCARD_FILE}
 o
 n
 p
@@ -31,7 +31,7 @@ p
 8192
 
 w
-EOF
+EOT
 
 if [ "${UBOOT_FILE}" != "" ]; then
     if [ ! -e "${UBOOT_FILE}" ]; then
@@ -68,7 +68,7 @@ if [ "${ROOTFS_FILE}" != "" ]; then
     sudo mount /dev/loop0 ${MOUNTPOINT}
 
     #tar xf ${ROOTFS_FILE} -C ${MOUNTPOINT}
-    bzip2 -dc ${ROOTFS_FILE} | sudo tar xv -C ${MOUNTPOINT}
+    bzip2 -dc ${ROOTFS_FILE} | sudo tar x -C ${MOUNTPOINT}
 
     sudo umount ${MOUNTPOINT}
     sudo losetup -d /dev/loop0
@@ -77,17 +77,19 @@ fi
 ls -la ${SDCARD_FILE}
 md5sum ${SDCARD_FILE}
 
-# Once your ${SDCARD_FILE} file is created, you have to put it into your sdcard (using dd).
-# Example:
-#	SDCARD_DEV=/dev/sdX
-#	sudo umount ${SDCARD_DEV}?
-#	sudo dd if=sdcard.img of=${SDCARD_DEV}
+cat <<EOT
+# Once your ${SDCARD_FILE} file is created, you have to put it into your uSDHC - example:
+#
+# SDCARD_DEV=/dev/sdX
+# sudo umount \${SDCARD_DEV}?
+# sudo dd if=sdcard.img of=\${SDCARD_DEV}
 
-# At the first boot, go into uboot and change your environment variables like this :
+# At the first boot, stop autoboot and type the following U-Boot commands:
 #
 # setenv bootargs "console=ttymxc0,115200 root=/dev/mmcblk0p1 rootwait ro video=mxcfb0:dev=hdmi,1920x1080M@60,if=RGB24"
 # setenv loadaddr 0x10800000
-# setenv bootcmd 'mmc dev 2; mmc read ${loadaddr} 0x800 0x2200; bootm'
+# setenv bootcmd 'mmc dev 2; mmc read \${loadaddr} 0x800 0x2200; bootm'
 # saveenv
+EOT
 
 # === EOF ===
