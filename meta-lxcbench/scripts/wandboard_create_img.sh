@@ -16,10 +16,11 @@ MOUNTPOINT=/tmp/sdcard
 # The following script will create a "sdcard.img" file with your freshly built uImage and u-boot.imx files.
 # You also need to provide a rootfs. In this case, it is a tar file "myrootfs.tar".
 #
-UBOOT_FILE=u-boot-6dl.bin
-UIMAGE_FILE=uImage
-#ROOTFS_FILE=
+UBOOT_FILE=~/wandboard/myandroid/out/target/product/wandboard/u-boot-6dl.bin
+UIMAGE_FILE=~/wandboard/myandroid/out/target/product/wandboard/uImage
+ROOTFS_FILE=~/mel6-lxcbench/build-imx53qsb/tmp/deploy/images/core-image-lxcbench-imx53qsb.tar.bz2
 
+echo "INFO: Creating ${SDCARD_FILE}"
 mkdir -p `dirname ${SDCARD_FILE}`
 dd bs=512 count=$(((1024*1024*1024)/512)) if=/dev/zero of=${SDCARD_FILE}
 cat <<EOF | fdisk ${SDCARD_FILE}
@@ -33,6 +34,10 @@ w
 EOF
 
 if [ "${UBOOT_FILE}" != "" ]; then
+    if [ ! -e "${UBOOT_FILE}" ]; then
+	echo "ERROR: Cannot find ${UBOOT_FILE}"
+	exit 1
+    fi
     echo "INFO: Adding ${UBOOT_FILE}"
     # Command to flash newer U-Boot (ver. 2013.xx):
     #dd if=${UBOOT_FILE} of=${SDCARD_FILE} conv=notrunc bs=512 seek=2
@@ -41,11 +46,19 @@ if [ "${UBOOT_FILE}" != "" ]; then
 fi
 
 if [ "${UIMAGE_FILE}" != "" ]; then
+    if [ ! -e "${UIMAGE_FILE}" ]; then
+	echo "ERROR: Cannot find ${UIMAGE_FILE}"
+	exit 1
+    fi
     echo "INFO: Adding ${UIMAGE_FILE}"
     dd if=${UIMAGE_FILE} conv=notrunc of=${SDCARD_FILE} bs=1M seek=1
 fi
 
 if [ "${ROOTFS_FILE}" != "" ]; then
+    if [ ! -e "${ROOTFS_FILE}" ]; then
+	echo "ERROR: Cannot find ${ROOTFS_FILE}"
+	exit 1
+    fi
     echo "INFO: Adding ${ROOTFS_FILE}"
 
     # FIXME: Should mount Partition 1 of ${SDCARD_FILE} instead!
@@ -54,7 +67,8 @@ if [ "${ROOTFS_FILE}" != "" ]; then
     mkdir -p ${MOUNTPOINT}
     sudo mount /dev/loop0 ${MOUNTPOINT}
 
-    tar xf ${ROOTFS_FILE} -C ${MOUNTPOINT}
+    #tar xf ${ROOTFS_FILE} -C ${MOUNTPOINT}
+    bzip2 -dc ${ROOTFS_FILE} | sudo tar xv -C ${MOUNTPOINT}
 
     sudo umount ${MOUNTPOINT}
     sudo losetup -d /dev/loop0
