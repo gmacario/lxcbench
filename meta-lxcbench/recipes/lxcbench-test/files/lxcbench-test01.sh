@@ -6,7 +6,8 @@
 # Description:	lxcbench-test01
 # ==================================================================================
 
-set -x
+#set -x
+set -e
 
 PTS_TARBALL=phoronix-test-suite-4.4.1.tar.gz
 PTS_INSTALLDIR=~/phoronix-test-suite
@@ -23,19 +24,27 @@ fi
 
 # -----------------------------------------------------------------------------------
 # Manually Install PTS from .tar.gz
+# -----------------------------------------------------------------------------------
 
-## Manually install PTS dependencies
-apt-get install php5-cli php5-curl php-fpdf
+if [ ! -x "${PTS_INSTALLDIR}/phoronix-test-suite" ]; then
 
-## Download and install PTS
-mkdir -p ${PTS_INSTALLDIR}
+    echo "INFO: Installing ${PTS_TARBALL}"
 
-cd ~/Downloads
-wget http://www.phoronix.net/downloads/phoronix-test-suite/releases/${PTS_TARBALL}
-tar xvfz ${PTS_TARBALL} -C ~
+    # Manually install PTS dependencies
+    apt-get install php5-cli php5-curl php-fpdf
+
+    ## Download and install PTS
+    mkdir -p ${PTS_INSTALLDIR}
+
+    wget -O - \
+	http://www.phoronix.net/downloads/phoronix-test-suite/releases/${PTS_TARBALL} \
+	| tar xvz -C ${PTS_INSTALLDIR}/..
+
+fi
 
 # -----------------------------------------------------------------------------------
 # Launch PTS and accept User Agreement
+# -----------------------------------------------------------------------------------
 
 mkdir -p ${PTS_INSTALLDIR}
 cd ${PTS_INSTALLDIR}
@@ -47,6 +56,7 @@ EOT
 
 # -----------------------------------------------------------------------------------
 # Perform LXCBENCH tests on Ubuntu
+# -----------------------------------------------------------------------------------
 
 cd ${PTS_INSTALLDIR}
 
@@ -70,7 +80,10 @@ EOT
 ## Run Batch Mode
 ./phoronix-test-suite batch-run pts/cachebench pts/dbench pts/c-ray pts/encode-mp3 pts/stream
 
-# Look at test esults
+# -----------------------------------------------------------------------------------
+# Look at test results
+# -----------------------------------------------------------------------------------
+
 ls -la ${PTS_WORKDIR}/test-results/
 
 
