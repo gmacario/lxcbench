@@ -31,7 +31,7 @@ if [ ! -x "${PTS_INSTALLDIR}/phoronix-test-suite" ]; then
     echo "INFO: Installing ${PTS_TARBALL}"
 
     # Manually install PTS dependencies
-    apt-get install php5-cli php5-curl php-fpdf
+    which apt-get && apt-get install php5-cli php5-curl php-fpdf
 
     ## Download and install PTS
     mkdir -p ${PTS_INSTALLDIR}
