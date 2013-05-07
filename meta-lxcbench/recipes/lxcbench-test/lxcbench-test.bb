@@ -2,6 +2,7 @@ DESCRIPTION = "LXCBENCH Test Scripts"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/GPL-2.0;md5=801f80980d171dd6425610833a22dbe6"
 RDEPENDS = "php-cli"
+PV = "1.1"
 PR = "r1"
 
 SRC_URI = "\
