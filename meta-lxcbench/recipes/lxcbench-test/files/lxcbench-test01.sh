@@ -14,7 +14,7 @@ PTS_INSTALLDIR=~/phoronix-test-suite
 PTS_WORKDIR=~/.phoronix-test-suite
 
 PROGNAME=`basename $0`
-echo "INFO: ${PROGNAME} v0.1"
+echo "INFO: ${PROGNAME} v1.1"
 
 
 if [ `whoami` != "root" ]; then
