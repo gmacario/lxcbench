@@ -15,9 +15,12 @@ MOUNTPOINT=/tmp/sdcard
 #
 # The following script will create a "sdcard.img" file with your freshly built uImage and u-boot.imx files.
 # You also need to provide a rootfs. In this case, it is a tar file "myrootfs.tar".
-#
-UBOOT_FILE=~/wandboard/myandroid/out/target/product/wandboard/u-boot-6dl.bin
-UIMAGE_FILE=~/wandboard/myandroid/out/target/product/wandboard/uImage
+
+#UBOOT_FILE=~/wandboard/myandroid/out/target/product/wandboard/u-boot-6dl.bin
+#UIMAGE_FILE=~/wandboard/myandroid/out/target/product/wandboard/uImage
+
+UBOOT_FILE=~/wandboard/wandboard-sdk-20130329/precompiled/u-boot.bin-dual
+UIMAGE_FILE=~/wandboard/wandboard-sdk-20130329/precompiled/uImage
 ROOTFS_FILE=~/mel6-lxcbench/build-imx53qsb/tmp/deploy/images/core-image-lxcbench-imx53qsb.tar.bz2
 
 echo "INFO: Creating ${SDCARD_FILE}"
@@ -61,7 +64,7 @@ if [ "${ROOTFS_FILE}" != "" ]; then
     fi
     echo "INFO: Adding ${ROOTFS_FILE}"
 
-    # FIXME: Should mount Partition 1 of ${SDCARD_FILE} instead!
+    # Mount partition 1 of ${SDCARD_FILE} as loop0
     sudo losetup /dev/loop0 ${SDCARD_FILE} -o $((8192*512))
     sudo mkfs.ext3 /dev/loop0
     mkdir -p ${MOUNTPOINT}
@@ -82,7 +85,7 @@ cat <<EOT
 #
 # SDCARD_DEV=/dev/sdX
 # sudo umount \${SDCARD_DEV}?
-# sudo dd if=sdcard.img of=\${SDCARD_DEV}
+# sudo dd if=${SDCARD_FILE} of=\${SDCARD_DEV}
 
 # At the first boot, stop autoboot and type the following U-Boot commands:
 #
