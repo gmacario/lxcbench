@@ -1,9 +1,10 @@
 DESCRIPTION = "LXCBENCH Test Scripts"
-LICENSE = "GPLv2"
+LICENSE = "GPL-2.0"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/GPL-2.0;md5=801f80980d171dd6425610833a22dbe6"
+DEPENDS = "phoronix-test-suite"
 RDEPENDS = "php-cli"
 PV = "1.1"
-PR = "r1"
+PR = "r3"
 
 SRC_URI = "\
 	file://lxcbench-test01.sh \
