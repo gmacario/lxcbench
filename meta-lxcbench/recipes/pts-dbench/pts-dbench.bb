@@ -7,49 +7,56 @@ LICENSE = "GPL-3.0"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/GPL-3.0;md5=c79ff39f19dfec6d293b95dea7b07891"
 
 DEPENDS = "phoronix-test-suite popt"
-#RDEPENDS = "php-cli"
-#PV = "1.0.0"
-PV = "4.0"
-PR = "r1"
+PV = "1.0.0"
+PR = "r2"
+
+SRC_PN = "dbench"
+SRC_PV = "4.0"
 
 SRC_URI = "\
-    http://samba.org/ftp/tridge/dbench/dbench-${PV}.tar.gz \
+    http://samba.org/ftp/tridge/dbench/${SRC_PN}-${SRC_PV}.tar.gz \
     file://destdir.patch \
     file://makefile.patch \
 "
 
-inherit autotools
-
-PACKAGES =+ "pts-tbench pts-tbench-dbg"
-
-TARGET_CC_ARCH += "${LDFLAGS}"
-
-FILES_pts-dbench += "${prefix}/share/client.txt"
-FILES_pts-tbench = "${bindir}/tbench*"
-FILES_pts-tbench-dbg += "${bindir}/.debug/tbench*"
-
 SRC_URI[md5sum] = "1fe56ff71b9a416f8889d7150ac54da4"
 SRC_URI[sha256sum] = "6001893f34e68a3cfeb5d424e1f2bfef005df96a22d86f35dc770c5bccf3aa8a"
 
-# FIXME: set installdir (as per phoronix-test-suite) to /usr/share/phoronix-test-suite/xxx
+# FIXME: set installdir to /home/root/.phoronix-test-suite/installed-tests/pts/dbench-1.0.0
+PTS_USERDIR = "/home/root/.phoronix-test-suite/installed-tests/pts/${SRC_PN}-${PV}"
+prefix = "${PTS_USERDIR}"
+bindir = "${prefix}/dbench_"
+
+EXTRA_OECONF := "--prefix=${PTS_USERDIR}"
+
+inherit autotools
+
+TARGET_CC_ARCH += "${LDFLAGS}"
+
+FILES_pts-dbench += " ${prefix}/client.txt"
+FILES_pts-dbench += " ${bindir}/tbench*"
+FILES_pts-dbench-dbg += " ${bindir}/.debug/tbench*"
 
 do_unpack() {
     echo "DEBUG: Custom do_unpack() start"
-    tar xvfz ${DL_DIR}/dbench-${PV}.tar.gz
-    mv dbench-${PV}/* ${PN}-${PV}/
-    rmdir dbench-${PV}
+    tar xvfz ${DL_DIR}/${SRC_PN}-${SRC_PV}.tar.gz
+    mv ${SRC_PN}-${SRC_PV}/* ${PN}-${PV}/
+    rmdir ${SRC_PN}-${SRC_PV}
     patch -p1 destdir.patch
     patch -p1 makefile.patch
     echo "DEBUG: Custom do_unpack() end"
 }
 
-#do_install() {
-#	install -d ${D}${bindir}
-#	#install -m 0755 ${WORKDIR}/lxcbench-test01.sh ${D}${bindir}
-#	echo "No files installed on target because of GPLv3"
-#}
+do_install_append() {
+    echo "DEBUG: Custom do_install_append() start"
+    install -d ${D}${prefix}
+    #install -m 0644 ${WORKDIR}/${PN}-${PV}/client.txt ${D}${prefix}
+    install -m 0644 ${S}/client.txt ${D}${prefix}
+    #install -m 0755 ${WORKDIR}/lxcbench-test01.sh ${D}${bindir}
+    echo "DEBUG: Custom do_install_append() end"
+}
 
-# From http://git.projects.genivi.org/?p=lxcbench.git;a=blob;f=contrib/thesis-fcastagnotto/install-dbench.sh
+# From http://git.projects.genivi.org/?p=lxcbench.git;a=blob;f=contrib/thesis-fcastagnotto/script-dbench.sh
 # ######################################################################################
 # #   DBENCH-1.0.0								     #
 # ######################################################################################
@@ -65,6 +72,34 @@ do_unpack() {
 # wget $(xpath -e "//URL" downloads.xml 2>/dev/null |  sed -e 's/<\/*URL>//g' -e 's/<URL>//g' -e 's/<\/URL>/ /g')
 # sudo ./install-dbench.sh
 # ./script-pts-xml.sh dbench-1.0.0
+
+# From http://git.projects.genivi.org/?p=lxcbench.git;a=blob;f=contrib/thesis-fcastagnotto/install-dbench.sh
+# ######################################################################################
+# #   INSTALL DBENCH-1.0.0                                                             #
+# ######################################################################################
+# #This script run the cross-compilation of the Dbench test.
+# 
+# #!/bin/sh
+# 
+# tar -zxvf dbench-4.0.tar.gz
+# mkdir $HOME/dbench_/
+# cd dbench-4.0/
+# 
+# ./autogen.sh
+# ./configure -build=i686-linux --host=arm-linux-gnueabi --prefix=$HOME/dbench_/
+# 
+# make -j $NUM_CPU_JOBS
+# echo $? > ~/install-exit-status
+# make install
+# cp client.txt ../
+# cd ..
+# rm -rf dbench-4.0/
+# 
+# echo "#!/bin/sh
+# ./dbench_/bin/dbench \$@ -c client.txt > \$LOG_FILE 2>&1
+# echo \$? > ~/test-exit-status" > dbench
+# 
+# chmod +x dbench
 
 # From http://git.projects.genivi.org/?p=lxcbench.git;a=blob;f=contrib/thesis-fcastagnotto/script-pts-xml.sh
 # ######################################################################################
@@ -107,33 +142,5 @@ do_unpack() {
 # chmod 0777 pts-install.xml
 # 
 # fi
-
-# From http://git.projects.genivi.org/?p=lxcbench.git;a=blob;f=contrib/thesis-fcastagnotto/install-dbench.sh
-# ######################################################################################
-# #   INSTALL DBENCH-1.0.0                                                             #
-# ######################################################################################
-# #This script run the cross-compilation of the Dbench test.
-# 
-# #!/bin/sh
-# 
-# tar -zxvf dbench-4.0.tar.gz
-# mkdir $HOME/dbench_/
-# cd dbench-4.0/
-# 
-# ./autogen.sh
-# ./configure -build=i686-linux --host=arm-linux-gnueabi --prefix=$HOME/dbench_/
-# 
-# make -j $NUM_CPU_JOBS
-# echo $? > ~/install-exit-status
-# make install
-# cp client.txt ../
-# cd ..
-# rm -rf dbench-4.0/
-# 
-# echo "#!/bin/sh
-# ./dbench_/bin/dbench \$@ -c client.txt > \$LOG_FILE 2>&1
-# echo \$? > ~/test-exit-status" > dbench
-# 
-# chmod +x dbench
 
 # === EOF ===
