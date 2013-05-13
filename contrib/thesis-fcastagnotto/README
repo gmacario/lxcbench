@@ -1,7 +1,6 @@
 This is a my personal contribution to the project LXCBENCH.
-Here, I commit the script to cross-compile the Phoronix tests:
+Here, I commit the script to cross-compile the following Phoronix tests:
 1- Dbench 1.0.0
-2- Cachebench 1.0.0
-3- Stream 1.0.0
+3- Stream 1.1.0
 
 F.Castagnotto
