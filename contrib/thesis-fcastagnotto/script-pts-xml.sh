@@ -1,5 +1,6 @@
-#This script generates the pts-install.xml file, needed by the Phoronix Suite to correctly run the test.
-#It assumes to default that the user on the target system is "debian". If not, change it in the href field.
+#This script generates the pts-install.xml file, needed by the Phoronix Suite to correctly run the tests.
+#The generated file must be copied inside the folder of the test "$HOME/.phoronix-test-suite/installed-tests/pts/<name_test>/"
+#It assumes to default that the user on the target system is "debian": if not, change it in the "href" field.
 
 #!/bin/bash
 
