@@ -5,12 +5,16 @@ hardware."
 
 LICENSE = "GPLv2"
 
+PV = "r1"
+
 #require recipes-core/images/core-image-base.bb
 require recipes-core/images/core-image-minimal.bb
 
 IMAGE_INSTALL_append = "\
-	packagegroup-lxcbench-base \
-	lxcbench-test \
+    packagegroup-lxcbench-base \
+    lxcbench-test \
+    phoronix-test-suite \
+    pts-dbench \
 "
 
 
