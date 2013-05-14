@@ -33,9 +33,11 @@ inherit autotools
 
 TARGET_CC_ARCH += "${LDFLAGS}"
 
-FILES_pts-dbench += " ${prefix}/client.txt"
-FILES_pts-dbench += " ${bindir}/tbench*"
-FILES_pts-dbench-dbg += " ${bindir}/.debug/tbench*"
+FILES_${PN} += " ${prefix}/client.txt"
+FILES_${PN} += " ${bindir}/dbench*"
+FILES_${PN} += " ${bindir}/tbench*"
+FILES_${PN}-dbg += " ${bindir}/.debug/dbench*"
+FILES_${PN}-dbg += " ${bindir}/.debug/tbench*"
 
 do_unpack() {
     echo "DEBUG: Custom do_unpack() start"
@@ -50,9 +52,9 @@ do_unpack() {
 do_install_append() {
     echo "DEBUG: Custom do_install_append() start"
     install -d ${D}${prefix}
-    #install -m 0644 ${WORKDIR}/${PN}-${PV}/client.txt ${D}${prefix}
+    #mv ${D}${prefix}/share/client.txt ${D}${prefix}
     install -m 0644 ${S}/client.txt ${D}${prefix}
-    #install -m 0755 ${WORKDIR}/lxcbench-test01.sh ${D}${bindir}
+    rm ${D}${prefix}/share/client.txt
     echo "DEBUG: Custom do_install_append() end"
 }
 
