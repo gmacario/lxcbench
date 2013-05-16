@@ -8,7 +8,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/GPL-3.0;md5=c7
 
 DEPENDS = "phoronix-test-suite popt"
 PV = "1.0.0"
-PR = "r2"
+PR = "r3"
 
 SRC_PN = "dbench"
 SRC_PV = "4.0"
@@ -24,13 +24,15 @@ SRC_URI = "\
     http://samba.org/ftp/tridge/dbench/${SRC_PN}-${SRC_PV}.tar.gz \
     file://destdir.patch \
     file://makefile.patch \
+    file://launch-dbench.sh \
+    file://pts-install.xml \
 "
 
 SRC_URI[md5sum] = "1fe56ff71b9a416f8889d7150ac54da4"
 SRC_URI[sha256sum] = "6001893f34e68a3cfeb5d424e1f2bfef005df96a22d86f35dc770c5bccf3aa8a"
 
 prefix = "${PTS_TESTDIR}"
-bindir = "${prefix}/dbench_"
+bindir = "${prefix}/dbench_/bin"
 
 EXTRA_OECONF := "--prefix=${PTS_TESTDIR}"
 
@@ -39,9 +41,11 @@ inherit autotools
 TARGET_CC_ARCH += "${LDFLAGS}"
 
 FILES_${PN} += " ${PTS_PROFDIR}/*"
-FILES_${PN} += " ${prefix}/client.txt"
 FILES_${PN} += " ${bindir}/dbench*"
 FILES_${PN} += " ${bindir}/tbench*"
+FILES_${PN} += " ${prefix}/client.txt"
+FILES_${PN} += " ${prefix}/dbench"
+FILES_${PN} += " ${prefix}/pts-install.xml"
 FILES_${PN}-dbg += " ${bindir}/.debug/dbench*"
 FILES_${PN}-dbg += " ${bindir}/.debug/tbench*"
 
@@ -64,6 +68,9 @@ do_install_append() {
     install -d ${D}${prefix}
     install -m 0644 ${S}/client.txt ${D}${prefix}
     rm ${D}${prefix}/share/client.txt
+
+    install -m 0755 ${FILESDIR}/launch-dbench.sh ${D}${prefix}/dbench
+    install -m 0644 ${FILESDIR}/pts-install.xml ${D}${prefix}
 
     echo "DEBUG: Custom do_install_append() end"
 }
