@@ -1,11 +1,9 @@
-# TODO: Adapted from meibp-2013/core-image-atp.bb
-
-DESCRIPTION = "A console-only image that fully supports the target device \
-hardware."
+DESCRIPTION = "An image suited for running the LXCBENCH test suite."
 
 LICENSE = "GPLv2"
 
-PV = "r1"
+PV = "1.1"
+PR = "r3"
 
 #require recipes-core/images/core-image-base.bb
 require recipes-core/images/core-image-minimal.bb
@@ -17,5 +15,7 @@ IMAGE_INSTALL_append = "\
     pts-dbench \
 "
 
+# Add extra space to image rootfs to store PTS test results
+IMAGE_ROOTFS_EXTRA_SPACE ?= "102400"
 
 # EOF
