@@ -15,7 +15,7 @@ IMAGE_INSTALL_append = "\
     pts-dbench \
 "
 
-# Add extra space to image rootfs to store PTS test results
-IMAGE_ROOTFS_EXTRA_SPACE ?= "102400"
+# Add 64MB extra space to image rootfs to store PTS test results
+IMAGE_ROOTFS_EXTRA_SPACE ?= "131072"
 
 # EOF
