@@ -2,11 +2,6 @@ PR = "${INC_PR}.2"
 
 COMPATIBLE_MACHINE = "(mx5)"
 
-#SRC_URI += " file://0003-imxlib-fix-videodev.patch"
-
-#SRC_URI[md5sum] = "45574f8f32f7000ca11d585fa60dea8c"
-#SRC_URI[sha256sum] = "f151a8bb3099b596b5834a1139c19e526802e6a0aa965018d16375e7e1f48f27"
-
 do_more_patches() {
     echo "DEBUG: do_more_patches() start"
     patch -p1 << END
