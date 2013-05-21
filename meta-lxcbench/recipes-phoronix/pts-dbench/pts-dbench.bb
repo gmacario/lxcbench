@@ -1,11 +1,11 @@
-DESCRIPTION = "PTS - dbench Disk Benchmark"
+DESCRIPTION = "PTS - Dbench (for testing the disk performance)"
 HOMEPAGE = "http://samba.org/ftp/tridge/dbench/"
 LICENSE = "GPL-3.0"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/GPL-3.0;md5=c79ff39f19dfec6d293b95dea7b07891"
 
 DEPENDS = "phoronix-test-suite popt"
 PV = "1.0.0"
-PR = "r3"
+PR = "r4"
 
 SRC_PN = "dbench"
 SRC_PV = "4.0"
