@@ -1,4 +1,4 @@
-DESCRIPTION = "PTS - Dbench (for testing the disk performance)"
+DESCRIPTION = "pts/dbench - alternative to netbench, contains only file-system calls for testing the disk performance"
 HOMEPAGE = "http://samba.org/ftp/tridge/dbench/"
 LICENSE = "GPL-3.0"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/GPL-3.0;md5=c79ff39f19dfec6d293b95dea7b07891"
@@ -50,9 +50,13 @@ do_unpack() {
     echo "DEBUG: Custom do_unpack() start"
 
     tar xvfz ${DL_DIR}/${SRC_PN}-${SRC_PV}.tar.gz
-    mv ${SRC_PN}-${SRC_PV} ${PN}-${PV}
-    patch -p1 destdir.patch
-    patch -p1 makefile.patch
+    mv ${SRC_PN}-${SRC_PV}/* ${PN}-${PV}/
+    rmdir ${SRC_PN}-${SRC_PV}
+
+    #patch -p1 destdir.patch
+    cat destdir.patch | (cd ${S}; patch -p1)
+    #patch -p1 makefile.patch
+    cat makefile.patch | (cd ${S}; patch -p1)
 
     echo "DEBUG: Custom do_unpack() end"
 }
