@@ -50,6 +50,7 @@ do_unpack() {
     echo "DEBUG: Custom do_unpack() start"
 
     tar xvfz ${DL_DIR}/${SRC_PN}-${SRC_PV}.tar.gz
+    mkdir -p ${PN}-${PV}
     mv ${SRC_PN}-${SRC_PV}/* ${PN}-${PV}/
     rmdir ${SRC_PN}-${SRC_PV}
 
