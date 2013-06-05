@@ -15,6 +15,13 @@ PTS_TARBALL=phoronix-test-suite-4.4.1.tar.gz
 PTS_INSTALLDIR=~/phoronix-test-suite
 PTS_USERDIR=~/.phoronix-test-suite
 
+PTS_NEEDED_TESTS=""
+PTS_NEEDED_TESTS="${PTS_NEEDED_TESTS} pts/cachebench"
+PTS_NEEDED_TESTS="${PTS_NEEDED_TESTS} pts/dbench"
+PTS_NEEDED_TESTS="${PTS_NEEDED_TESTS} pts/c-ray"
+PTS_NEEDED_TESTS="${PTS_NEEDED_TESTS} pts/encode-mp3"
+PTS_NEEDED_TESTS="${PTS_NEEDED_TESTS} pts/stream"
+
 PROGNAME=`basename $0`
 echo "INFO: ${PROGNAME}"
 
@@ -74,16 +81,29 @@ Y
 EOT
 
 # -----------------------------------------------------------------------------------
-# Perform LXCBENCH tests
+# Make sure that the tests needed by LXCBENCH have been installed
 # -----------------------------------------------------------------------------------
 
 cd ${PTS_INSTALLDIR}
+${PTS_EXE} list-installed-tests >/tmp/pts-installed-tests.txt
 
-## Install dependencies for PTS tests
-${PTS_EXE} install-dependencies pts/cachebench pts/dbench pts/c-ray pts/encode-mp3 pts/stream
+available_tests=""
+for t in ${PTS_NEEDED_TESTS}; do
+    if grep "${t}" /tmp/pts-installed-tests.txt >/dev/null; then
+        echo "INFO: Test ${t} is already installed"
+        available_tests="${available_tests} ${t}"
+    else
+        echo "INFO: Trying to install test ${t}"
+        ${PTS_EXE} install-dependencies ${t} && \
+        ${PTS_EXE} install ${t} && \
+        available_tests="${available_tests} ${t}"
+    fi
+done
+#echo "DEBUG: available_tests=${available_tests}"
 
-## Download and install the tests
-${PTS_EXE} install pts/cachebench pts/dbench pts/c-ray pts/encode-mp3 pts/stream
+# -----------------------------------------------------------------------------------
+# Perform LXCBENCH tests
+# -----------------------------------------------------------------------------------
 
 ## Configure Batch Mode
 ${PTS_EXE} batch-setup <<EOT
@@ -97,7 +117,7 @@ y
 EOT
 
 ## Run Batch Mode
-${PTS_EXE} batch-run pts/cachebench pts/dbench pts/c-ray pts/encode-mp3 pts/stream
+${PTS_EXE} batch-run ${PTS_NEEDED_TESTS}
 
 # -----------------------------------------------------------------------------------
 # Look at test results
