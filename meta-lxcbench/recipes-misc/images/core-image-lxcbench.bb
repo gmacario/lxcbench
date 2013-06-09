@@ -17,6 +17,7 @@ IMAGE_INSTALL_append = "\
 "
 
 # Required by lxc-create -t busybox
+IMAGE_INSTALL_append += " bash"
 IMAGE_INSTALL_append += " coreutils"
 
 # Make sure to have at least 256MB free space
