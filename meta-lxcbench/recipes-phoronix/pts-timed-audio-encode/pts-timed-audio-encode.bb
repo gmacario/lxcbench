@@ -1,12 +1,12 @@
-DESCRIPTION = "pts/timed-audio-encode - ?"
+DESCRIPTION = "pts/timed-audio-encode - Track 10 from the Nine Inch Nails \"The Slip\" CD"
 
-#HOMEPAGE = "http://lame.sourceforge.net/"
+HOMEPAGE = "http://dl.nin.com/theslip/signup"
 LICENSE = "CC-BY-NC-SA-3.0"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/CC-BY-NC-SA-3.0;md5=b285975b5e439d99c95bcba5b5a8cf39"
 
-DEPENDS = "phoronix-test-suite"
+#DEPENDS = "phoronix-test-suite"
 PV = "1.0.0"
-PR = "r1"
+PR = "r2"
 
 TEST_PN = "timed-audio-encode"
 
