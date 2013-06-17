@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/CC-BY-NC-SA-3.
 
 DEPENDS = "phoronix-test-suite"
 PV = "1.0.0"
-PR = "r0"
+PR = "r1"
 
 TEST_PN = "timed-audio-encode"
 
@@ -36,7 +36,7 @@ prefix = "${PTS_TESTDIR}"
 ##TARGET_CC_ARCH += "${LDFLAGS}"
 
 FILES_${PN} += " ${PTS_PROFDIR}/*"
-FILES_${PN} += " ${prefix}/pts-trondheim-3.wav"
+FILES_${PN} += " ${prefix}/pts-trondheim.wav"
 FILES_${PN} += " ${prefix}/pts-install.xml"
 #FILES_${PN} += " ${bindir}/lame*"
 #FILES_${PN}-dbg += " ${bindir}/.debug/lame*"
@@ -71,7 +71,7 @@ do_install() {
     unzip ${FILESDIR}/${TEST_PROFILE} -d ${D}${PTS_PROFDIR}
 
     install -d ${D}${prefix}
-    install -m 0644 ${WORKDIR}/pts-trondheim-3.wav ${D}${prefix}
+    install -m 0644 ${WORKDIR}/pts-trondheim-3.wav ${D}${prefix}/pts-trondheim.wav
     install -m 0644 ${FILESDIR}/pts-install.xml ${D}${prefix}
 }
 
