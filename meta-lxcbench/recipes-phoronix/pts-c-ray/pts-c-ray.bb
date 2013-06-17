@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/GPL-2.0;md5=80
 
 DEPENDS = "phoronix-test-suite"
 PV = "1.1.0"
-PR = "r1"
+PR = "r2"
 
 TEST_PN = "c-ray"
 
@@ -29,7 +29,7 @@ SRC_URI[md5sum] = "5b0b939c953dc7f7eb03fae2c1526d33"
 SRC_URI[sha256sum] = "6f507aae47a9367334b8cb50f50eb4ad0f6fef99aeae9f2f7d55ba9818e798bf"
 
 prefix = "${PTS_TESTDIR}"
-bindir = "${prefix}"
+bindir = "${prefix}/c-ray-1.1"
 
 inherit autotools
 
