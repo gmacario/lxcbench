@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/GPL-2.0;md5=80
 
 DEPENDS = "phoronix-test-suite"
 PV = "1.1.0"
-PR = "r0"
+PR = "r1"
 
 TEST_PN = "c-ray"
 
@@ -81,7 +81,7 @@ do_install() {
 cd c-ray-1.1/
 RT_THREADS=\$((\$NUM_CPU_CORES * 16))
 ./c-ray-mt -t \$RT_THREADS -s 1600x1200 -r 8 -i sphfract -o output.ppm > \$LOG_FILE 2>&1
-echo \$? > ~/test-exit-status" > c-ray
+echo \$? > ~/test-exit-status
 END
     chmod +x ${D}${prefix}/c-ray
 
