@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/GPL-2.0;md5=80
 
 DEPENDS = "phoronix-test-suite"
 PV = "1.1.0"
-PR = "r2"
+PR = "r3"
 
 TEST_PN = "c-ray"
 
@@ -39,6 +39,8 @@ FILES_${PN} += " ${PTS_PROFDIR}/*"
 FILES_${PN} += " ${prefix}/c-ray"
 FILES_${PN} += " ${prefix}/pts-install.xml"
 FILES_${PN} += " ${bindir}/c-ray-mt*"
+FILES_${PN} += " ${bindir}/scene"
+FILES_${PN} += " ${bindir}/sphfract"
 FILES_${PN}-dbg += " ${bindir}/.debug/c-ray-mt*"
 
 do_unpack() {
@@ -76,6 +78,8 @@ do_install() {
     install -d ${D}${prefix}
     install -d ${D}${bindir}
     install -m 0755 c-ray-mt ${D}${bindir}
+    install -m 0644 scene ${D}${bindir}
+    install -m 0644 sphfract ${D}${bindir}
     cat << END >${D}${prefix}/c-ray
 #!/bin/sh
 cd c-ray-1.1/
