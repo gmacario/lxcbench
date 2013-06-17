@@ -12,7 +12,10 @@ IMAGE_INSTALL_append = "\
     packagegroup-lxcbench-base \
     lxcbench-test \
     phoronix-test-suite \
+    pts-c-ray \
+    pts-cachebench \
     pts-dbench \
+    pts-encode-mp3 \
     pts-stream \
 "
 
