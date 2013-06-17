@@ -1,12 +1,9 @@
 DESCRIPTION = "pts/stream - This benchmark tests the system memory (RAM) performance"
 
-#HOMEPAGE = "http://samba.org/ftp/tridge/dbench/"
 LICENSE = "GPL-3.0"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/GPL-3.0;md5=c79ff39f19dfec6d293b95dea7b07891"
 
 DEPENDS = "phoronix-test-suite"
-#TODO: DEPENDS += " libgomp"
-#TODO: DEPENDS += " openmp"
 PV = "1.1.0"
 PR = "r0"
 
@@ -29,18 +26,10 @@ SRC_URI[md5sum] = "db10871405a08a3873306fcb2688f729"
 SRC_URI[sha256sum] = "4232fa4ff0f6418722679fe5468e5d302698529da49c829f9962867b02ebff90"
 
 prefix = "${PTS_TESTDIR}"
-#bindir = "${prefix}/dbench_/bin"
 
 EXTRA_OECONF := "--prefix=${PTS_TESTDIR}"
 
-#inherit autotools
-
-#TARGET_CC_ARCH += "${LDFLAGS}"
-
 FILES_${PN} += " ${PTS_PROFDIR}/*"
-#FILES_${PN} += " ${bindir}/dbench*"
-#FILES_${PN} += " ${bindir}/tbench*"
-#FILES_${PN} += " ${prefix}/client.txt"
 FILES_${PN} += " ${prefix}/stream"
 FILES_${PN} += " ${prefix}/stream-bin"
 FILES_${PN} += " ${prefix}/pts-install.xml"
